@@ -5,14 +5,14 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%posts}}`.
  */
-class m240416_021129_create_posts_table extends Migration
+class m240416_021129_create_post_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%posts}}', [
+        $this->createTable('{{%post}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string()->notNull(),
             'body' => 'LONGTEXT',
@@ -24,10 +24,10 @@ class m240416_021129_create_posts_table extends Migration
             'isDeleted' => $this->boolean(),
         ]);
         $this->addForeignKey(
-            'fk-posts-created_by',
-            '{{%posts}}',
+            'fk-post-created_by',
+            '{{%post}}',
             'created_by',
-            '{{%users}}',
+            '{{%user}}',
             'id'
         );
     }
@@ -37,7 +37,7 @@ class m240416_021129_create_posts_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk-posts-userID', '{{%posts}}');
-        $this->dropTable('{{%posts}}');
+        $this->dropForeignKey('fk-post-userID', '{{%post}}');
+        $this->dropTable('{{%post}}');
     }
 }

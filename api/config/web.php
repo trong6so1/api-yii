@@ -25,6 +25,15 @@ $config = [
                 'application/json' => 'yii\web\JsonParser',
             ],
         ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'timeZone' => 'Asia/Ho_Chi_Minh',
+        ],
+        'queue' => [
+            'class' => 'yii\queue\redis\Queue',
+            'redis' => 'redis',
+            'channel' => 'queue',
+        ],
 //        'mailer' => [
 //            'class' => 'yii\swiftmailer\Mailer',
 //            'useFileTransport' => false,

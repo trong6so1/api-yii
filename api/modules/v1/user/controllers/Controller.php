@@ -1,17 +1,15 @@
 <?php
 
-namespace api\modules\v1\users\controllers;
-
+namespace api\modules\v1\user\controllers;
 
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
-use yii\rest\ActiveController;
 
 /**
  * Class Controller
  * @package api\modules\v1\article\controllers
  */
-class Controller extends ActiveController
+class Controller extends \yii\rest\Controller
 {
     public function behaviors()
     {
@@ -20,7 +18,7 @@ class Controller extends ActiveController
             'authMethods' => [
                 HttpBearerAuth::class,
             ],
-            'except' => ['login','signup']
+            'except' => ['login', 'signup']
         ];
         $behaviors = parent::behaviors();
         return $behaviors;

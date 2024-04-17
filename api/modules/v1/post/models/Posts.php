@@ -1,33 +1,57 @@
 <?php
 
-namespace api\modules\v1\products\models;
+namespace api\modules\v1\post\models;
 
+use api\modules\v1\User\models\User;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii2tech\ar\softdelete\SoftDeleteBehavior;
 use Yii;
-use DateTime;
-use DateTimeZone;
-class Products extends ActiveRecord
+use yii2tech\ar\softdelete\SoftDeleteBehavior;
+
+class Post extends ActiveRecord
 {
     public static function tableName()
     {
-        return '{{%products}}';
+        return '{{%post}}';
     }
 
     public function rules()
     {
         return [
-            [['title', 'price', 'discountPercentage', 'rating', 'brand', 'category'], 'required'],
-            [['description'], 'string'],
-            [['price', 'discountPercentage', 'rating'], 'number'],
-            [['stock'], 'integer'],
-            [['title', 'brand', 'category'], 'string', 'max' => 255],
+            [['title', 'tags', 'reactions'], 'required'],
+            [['body'], 'string'],
+            [['created_by', 'reactions'], 'integer'],
+            [['title'], 'string', 'max' => 255]
         ];
     }
 
+    public function fields()
+    {
+        return ['id', 'title', 'body', 'tags', 'reactions', 'user', 'created_at', 'updated_at',];
+    }
+
+    public function extraFields()
+    {
+        return ['isDeleted'];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'created_by']);
+    }
+
+    public function getTags()
+    {
+        return explode(',', $this->tags);
+
+    }
+
+
     public function beforeSave($insert)
     {
+        if (is_array($this->tags)) {
+            $this->setAttribute('tags', implode(',', $this->tags));
+        }
         if ($insert) {
             $this->setAttribute('created_by', Yii::$app->user->id);
         }
@@ -44,8 +68,7 @@ class Products extends ActiveRecord
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
                 ],
                 'value' => function () {
-                    $dateTime = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
-                    return $dateTime->format('Y-m-d H:i:s');
+                    return Yii::$app->formatter->asDatetime(time(), 'php:Y-m-d H:i:s');
                 },
             ],
             'softDeleteBehavior' => [
@@ -58,6 +81,7 @@ class Products extends ActiveRecord
 
         ];
     }
+
     public static function find()
     {
         return parent::find()->where(['isDeleted' => null]);

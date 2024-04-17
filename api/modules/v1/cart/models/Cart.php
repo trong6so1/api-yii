@@ -2,28 +2,32 @@
 
 namespace api\modules\v1\cart\models;
 
-use dmstr\db\tests\unit\Product;
-use yii\behaviors\TimestampBehavior;
+use api\modules\v1\Product\models\Product;
+use api\modules\v1\User\models\User;
 use yii\db\ActiveRecord;
-use yii2tech\ar\softdelete\SoftDeleteBehavior;
-use Yii;
-use DateTime;
-use DateTimeZone;
+
 class Cart extends ActiveRecord
 {
     public static function tableName()
     {
         return '{{%cart}}';
     }
+
     public function fields()
     {
-        return ['product_id','user_id','quantity'];
+        return ['quantity', 'product'];
+    }
+
+    public function extraFields()
+    {
+        return ['user_id', 'user'];
     }
 
     public function getUser()
     {
-        return $this->hasOne('api\modules\v1\models\User', ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
+
     public function getProduct()
     {
         return $this->hasOne(Product::class, ['id' => 'product_id']);

@@ -15,14 +15,14 @@ class Module extends \yii\base\Module
     {
         parent::init();
         $this->modules = [
-            'products' => [
-                'class' => products\Module::class,
+            'product' => [
+                'class' => product\Module::class,
             ],
-            'users' => [
-                'class' => users\Module::class,
+            'user' => [
+                'class' => user\Module::class,
             ],
-            'posts' => [
-                'class' => posts\Module::class,
+            'post' => [
+                'class' => post\Module::class,
             ],
             'cart' => [
                 'class' => cart\Module::class,

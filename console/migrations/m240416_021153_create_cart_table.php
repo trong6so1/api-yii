@@ -22,14 +22,14 @@ class m240416_021153_create_cart_table extends Migration
             'fk_cart_product_id',
             'cart',
             'product_id',
-            'products',
+            'product',
             'id'
         );
         $this->addForeignKey(
             'fk_cart_user_id',
             'cart',
             'user_id',
-            'users',
+            'user',
             'id'
         );
     }

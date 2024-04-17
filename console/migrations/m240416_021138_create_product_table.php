@@ -5,14 +5,14 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%products}}`.
  */
-class m240416_021138_create_products_table extends Migration
+class m240416_021138_create_product_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%products}}', [
+        $this->createTable('{{%product}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string()->notNull(),
             'description' => 'LONGTEXT',
@@ -28,10 +28,10 @@ class m240416_021138_create_products_table extends Migration
             'isDeleted' => $this->boolean()
         ]);
         $this->addForeignKey(
-            'fk-products-created_by',
-            'products',
+            'fk-product-created_by',
+            'product',
             'created_by',
-            'users',
+            'user',
             'id'
         );
     }
@@ -41,7 +41,7 @@ class m240416_021138_create_products_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk-products-created_by', 'products');
-        $this->dropTable('{{%products}}');
+        $this->dropForeignKey('fk-product-created_by', 'product');
+        $this->dropTable('{{%product}}');
     }
 }

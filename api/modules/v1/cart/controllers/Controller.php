@@ -14,7 +14,7 @@ use yii\rest\ActiveController;
 class Controller extends ActiveController
 {
 
-    public function behaviors()
+    public function behaviors(): array
     {
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [

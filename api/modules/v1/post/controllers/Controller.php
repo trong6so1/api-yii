@@ -1,19 +1,18 @@
 <?php
 
-namespace api\modules\v1\products\controllers;
+namespace api\modules\v1\post\controllers;
 
 
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
-use yii\rest\ActiveController;
 
 /**
  * Class Controller
  * @package api\modules\v1\article\controllers
  */
-class Controller extends ActiveController
+class Controller extends \yii\rest\Controller
 {
-    public function behaviors()
+    public function behaviors(): array
     {
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [

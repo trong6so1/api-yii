@@ -5,11 +5,10 @@ return [
     'showScriptName' => false,
     'rules' => [
         'class' => 'yii\rest\UrlRule',
-        'controller' => 'v1/users/users', 'v1/posts/posts', 'v1/products/products', 'v1/cart/cart',
-        'GET v1/products/products/<id:\d+>' => 'v1/products/products/view',
-        'GET v1/posts/posts/<id:\d+>' => 'v1/posts/posts/view',
-        'GET v1/users/users/<id:\d+>' => 'v1/users/users/view',
-        'POST v1/users/users/signup' => 'v1/users/users/create',
-
+        'controller' => 'v1/user/user', 'v1/post/post', 'v1/products/product', 'v1/cart/cart',
+        'GET v1/product/product/<id:\d+>' => 'v1/product/product/view',
+        'GET v1/post/post/<id:\d+>' => 'v1/post/post/view',
+        'GET v1/user/user/<id:\d+>' => 'v1/user/user/view',
+        'POST v1/user/user/signup' => 'v1/user/user/create',
     ]
 ];
