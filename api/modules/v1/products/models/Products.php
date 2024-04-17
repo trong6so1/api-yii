@@ -62,4 +62,5 @@ class Products extends ActiveRecord
     {
         return parent::find()->where(['isDeleted' => null]);
     }
+
 }

@@ -15,14 +15,14 @@ class Controller extends ActiveController
 {
     public function behaviors()
     {
-        $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => CompositeAuth::class,
             'authMethods' => [
                 HttpBearerAuth::class,
             ],
-            'except' => ['login','logout'],
+            'except' => ['login','signup']
         ];
+        $behaviors = parent::behaviors();
         return $behaviors;
     }
 }

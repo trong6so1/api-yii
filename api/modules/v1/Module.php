@@ -23,6 +23,9 @@ class Module extends \yii\base\Module
             ],
             'posts' => [
                 'class' => posts\Module::class,
+            ],
+            'cart' => [
+                'class' => cart\Module::class,
             ]
         ];
     }

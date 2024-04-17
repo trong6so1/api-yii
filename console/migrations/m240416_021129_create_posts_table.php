@@ -21,6 +21,7 @@ class m240416_021129_create_posts_table extends Migration
             'created_at' => $this->dateTime()->notNull(),
             'created_by' => $this->integer()->notNull(),
             'updated_at' => $this->dateTime()->notNull(),
+            'isDeleted' => $this->boolean(),
         ]);
         $this->addForeignKey(
             'fk-posts-created_by',

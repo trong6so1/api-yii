@@ -24,6 +24,7 @@ class m240416_021121_create_users_table extends Migration
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
+            'isDeleted' => $this->boolean(),
         ]);
     }
 

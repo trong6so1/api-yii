@@ -2,6 +2,7 @@
 
 namespace api\modules\v1\cart\models;
 
+use dmstr\db\tests\unit\Product;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii2tech\ar\softdelete\SoftDeleteBehavior;
@@ -14,21 +15,17 @@ class Cart extends ActiveRecord
     {
         return '{{%cart}}';
     }
-
-    public function behaviors()
+    public function fields()
     {
-        return [
-            [
-                'class' => TimestampBehavior::class,
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
-                ],
-                'value' => function () {
-                    $dateTime = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
-                    return $dateTime->format('Y-m-d H:i:s');
-                },
-            ],
-        ];
+        return ['product_id','user_id','quantity'];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne('api\modules\v1\models\User', ['id' => 'user_id']);
+    }
+    public function getProduct()
+    {
+        return $this->hasOne(Product::class, ['id' => 'product_id']);
     }
 }

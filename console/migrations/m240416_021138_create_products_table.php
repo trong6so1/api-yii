@@ -25,6 +25,7 @@ class m240416_021138_create_products_table extends Migration
             'created_by' => $this->integer()->notNull(),
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime()->notNull(),
+            'isDeleted' => $this->boolean()
         ]);
         $this->addForeignKey(
             'fk-products-created_by',

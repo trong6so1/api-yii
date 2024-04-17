@@ -5,6 +5,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\web\IdentityInterface;
 use yii2tech\ar\softdelete\SoftDeleteBehavior;
 use DateTime;
@@ -80,8 +81,22 @@ class Users extends ActiveRecord implements IdentityInterface
             [['username','email'], 'required'],
             [['username','email'], 'string', 'max' => 255],
             [['username','email'], 'unique'],
+            [['username','email'], 'uniqueWithDeleted'],
         ];
     }
+
+    public function uniqueWithDeleted($attribute, $params)
+    {
+        $query = new Query();
+        $exists = $query->from($this->tableName())
+            ->where([$attribute => $this->$attribute, 'isDeleted' => 1])
+            ->exists();
+
+        if ($exists) {
+            $this->addError($attribute, $attribute." \"".Yii::$app->request->post($attribute)." \"".' has already been taken.');
+        }
+    }
+
 
     /**
      * {@inheritdoc}
