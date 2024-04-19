@@ -3,12 +3,10 @@
 namespace api\modules\v1\post\models;
 
 use api\modules\v1\User\models\User;
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
+use common\models\Base;
 use Yii;
-use yii2tech\ar\softdelete\SoftDeleteBehavior;
 
-class Post extends ActiveRecord
+class Post extends Base
 {
     public static function tableName()
     {
@@ -46,7 +44,6 @@ class Post extends ActiveRecord
 
     }
 
-
     public function beforeSave($insert)
     {
         if (is_array($this->tags)) {
@@ -56,35 +53,6 @@ class Post extends ActiveRecord
             $this->setAttribute('created_by', Yii::$app->user->id);
         }
         return parent::beforeSave($insert);
-    }
-
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::class,
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
-                ],
-                'value' => function () {
-                    return Yii::$app->formatter->asDatetime(time(), 'php:Y-m-d H:i:s');
-                },
-            ],
-            'softDeleteBehavior' => [
-                'class' => SoftDeleteBehavior::className(),
-                'softDeleteAttributeValues' => [
-                    'isDeleted' => true
-                ],
-                'replaceRegularDelete' => true // mutate native `delete()` method
-            ],
-
-        ];
-    }
-
-    public static function find()
-    {
-        return parent::find()->where(['isDeleted' => null]);
     }
 
 }

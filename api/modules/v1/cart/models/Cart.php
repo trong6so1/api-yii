@@ -4,9 +4,8 @@ namespace api\modules\v1\cart\models;
 
 use api\modules\v1\Product\models\Product;
 use api\modules\v1\User\models\User;
-use yii\db\ActiveRecord;
 
-class Cart extends ActiveRecord
+class Cart extends \common\models\Cart
 {
     public static function tableName()
     {

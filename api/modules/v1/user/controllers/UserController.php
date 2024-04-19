@@ -6,53 +6,67 @@ use api\helper\response\ApiConstant;
 use api\helper\response\ResultHelper;
 use api\modules\v1\user\models\User;
 use Yii;
-use yii\rest\ActiveController;
 
-class UserController extends ActiveController
+class UserController extends Controller
 {
     public $modelClass = 'api\modules\v1\user\models\User';
 
-    public function actions()
+    public function actionIndex()
     {
-        $actions = parent::actions();
-        unset($actions['create'], $actions['delete']);
-        return $actions;
+        return $this->modelClass::find()->all();
+    }
+    public function actionView($id)
+    {
+        $user = $this->modelClass::findOne($id);
+        if($user)
+        {
+            $statusCode = ApiConstant::SC_OK;
+            $data = [
+                'user' => $user
+            ];
+            $error = null;
+            $message = 'Get user Success';
+            return ResultHelper::build($statusCode, $data, $error, $message);
+        }
+        else{
+            $statusCode = ApiConstant::SC_BAD_REQUEST;
+            $data = null;
+            $error = 'User ID not found';
+            $message = 'Get user Failed';
+            return ResultHelper::build($statusCode, $data, $error, $message);
+        }
     }
 
     public function actionCreate()
     {
-        $user = new User();
-        $user->email = Yii::$app->request->post('email');
-        $user->username = Yii::$app->request->post('username');
-        $user->password = Yii::$app->request->post('password');
-        if ($user->validate()) {
-            if ($user->save()) {
-                $statusCode = ApiConstant::SC_OK;
-                $data = $user;
-                $message = 'User created successfully';
-                $error = null;
-            } else {
-                $statusCode = ApiConstant::SC_BAD_REQUEST;
-                $data = null;
-                $error = 'Failed to create user';
-                $message = 'An error occurred while creating the user';
-            }
-        } else {
+        $user = new $this->modelClass;
+        return $user->actionCreate();
+    }
+
+    public function actionUpdate($id)
+    {
+        $user = $this->modelClass::findOne($id);
+        if (!$user) {
             $statusCode = ApiConstant::SC_BAD_REQUEST;
             $data = null;
-            $message = 'An error occurred while creating the user';
-            $error = $user->getFirstErrors();
+            $error = 'User ID not found';
+            $message = 'Delete Failed';
+            return ResultHelper::build($statusCode, $data, $error, $message);
+        } else {
+            return $user->actionUpdate();
         }
-        return ResultHelper::build($statusCode, $data, $error, $message);
+
     }
+
 
     public function actionLogin()
     {
         $username = Yii::$app->request->post('username');
         $password = Yii::$app->request->post('password');
-        $user = User::findOne(['username' => $username]);
+        $user = $this->modelClass::findOne(['username' => $username]);
         if ($user) {
             if ($user->validatePassword($password)) {
+                Yii::$app->user->login($user);
                 $statusCode = ApiConstant::SC_OK;
                 $data = ["token" => $user->access_token];
                 $error = null;
@@ -75,20 +89,16 @@ class UserController extends ActiveController
 
     public function actionDelete($id)
     {
-        $product = User::findOne($id);
-        if ($product) {
-            $product->delete();
-            $statusCode = ApiConstant::SC_OK;
-            $data = 'Deleted post id = ' . $id . ' successfully.';
-            $error = null;
-            $message = 'Delete successfully';
-        } else {
+        $user = $this->modelClass::findOne($id);
+        if (!$user) {
             $statusCode = ApiConstant::SC_BAD_REQUEST;
             $data = null;
-            $error = 'Delete Failed';
-            $message = 'Post ID not found';
+            $error = 'User ID not found';
+            $message = 'Delete Failed';
+            return ResultHelper::build($statusCode, $data, $error, $message);
         }
-        return ResultHelper::build($statusCode, $data, $error, $message);
+        return $user->actionDelete();
     }
+
 
 }

@@ -13,6 +13,7 @@ class Controller extends \yii\rest\Controller
 {
     public function behaviors()
     {
+        $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => CompositeAuth::class,
             'authMethods' => [
@@ -20,7 +21,6 @@ class Controller extends \yii\rest\Controller
             ],
             'except' => ['login', 'signup']
         ];
-        $behaviors = parent::behaviors();
         return $behaviors;
     }
 }

@@ -4,36 +4,67 @@ namespace api\modules\v1\post\controllers;
 
 use api\helper\response\ApiConstant;
 use api\helper\response\ResultHelper;
-use api\modules\v1\post\models\Post;
-use yii\rest\ActiveController;
 
-class PostController extends ActiveController
+class PostController extends Controller
 {
     public $modelClass = '\api\modules\v1\post\models\Post';
 
-    public function actions()
+    public function actionIndex()
     {
-        $actions = parent::actions();
-        unset($actions['delete']);
-        return $actions;
+        return $this->modelClass::find()->all();
+    }
+    public function actionView($id)
+    {
+        $post = $this->modelClass::findOne($id);
+        if ($post) {
+            $statusCode = ApiConstant::SC_OK;
+            $data = [
+                'Post' => $post
+            ];
+            $error = null;
+            $message = 'Get post Success';
+            return ResultHelper::build($statusCode, $data, $error, $message);
+        } else {
+            $statusCode = ApiConstant::SC_BAD_REQUEST;
+            $data = null;
+            $error = 'Post ID not found';
+            $message = 'Get post Failed';
+            return ResultHelper::build($statusCode, $data, $error, $message);
+        }
+    }
+
+    public function actionCreate()
+    {
+        $post = new $this->modelClass;
+        return $post->actionCreate();
+    }
+
+    public function actionUpdate($id)
+    {
+        $post = $this->modelClass::findOne($id);
+        if (!$post) {
+            $statusCode = ApiConstant::SC_BAD_REQUEST;
+            $data = null;
+            $error = 'Post ID not found';
+            $message = 'Delete Failed';
+            return ResultHelper::build($statusCode, $data, $error, $message);
+        } else {
+            return $post->actionUpdate();
+        }
+
     }
 
     public function actionDelete($id)
     {
-        $post = Post::findOne($id);
-        if ($post) {
-            $post->delete();
-            $statusCode = ApiConstant::SC_OK;
-            $data = 'Deleted post id = ' . $id . ' successfully.';
-            $error = null;
-            $message = 'Deleted Post successfully.';
-        } else {
+        $post = $this->modelClass::findOne($id);
+        if (!$post) {
             $statusCode = ApiConstant::SC_BAD_REQUEST;
             $data = null;
-            $error = 'Delete Failed';
-            $message = 'Post ID not found';
+            $error = 'Post ID not found';
+            $message = 'Delete Failed';
+            return ResultHelper::build($statusCode, $data, $error, $message);
         }
-        return ResultHelper::build($statusCode, $data, $error, $message);
+        return $post->actionDelete();
     }
 
 }
