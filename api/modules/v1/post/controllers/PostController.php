@@ -4,6 +4,8 @@ namespace api\modules\v1\post\controllers;
 
 use api\helper\response\ApiConstant;
 use api\helper\response\ResultHelper;
+use common\jobs\AddJob;
+use Yii;
 
 class PostController extends Controller
 {

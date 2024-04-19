@@ -27,18 +27,18 @@ class Product extends Base
     public function rules()
     {
         return [
-            [['title', 'price', 'discountPercentage', 'rating', 'brand', 'category'], 'required'],
+            [['title', 'price', 'category'], 'required'],
             [['description'], 'string'],
-            [['price', 'discountPercentage', 'rating'], 'number'],
+            [['price'], 'number'],
             [['stock'], 'integer'],
-            [['title', 'brand', 'category'], 'string', 'max' => 255],
+            [['title', 'category'], 'string', 'max' => 255],
         ];
     }
 
     public function beforeSave($insert)
     {
         if ($insert) {
-            $this->setAttribute('created_by', Yii::$app->user->id);
+            $this->setAttribute('created_by', $this->created_by ?? Yii::$app->user->id);
         }
         return parent::beforeSave($insert);
     }

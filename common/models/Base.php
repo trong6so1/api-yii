@@ -40,13 +40,22 @@ Base extends ActiveRecord
     {
         return parent::find()->where(['isDeleted' => null]);
     }
+
     public function actionCreate()
     {
-        if ($this->load(Yii::$app->request->post(), '') && $this->insert()) {
-            $statusCode = ApiConstant::SC_OK;
-            $data = $this;
-            $error = null;
-            $message = 'Create ' . $this->tableSchema->name. ' successfully';
+        if ($this->load(Yii::$app->request->post(), '') && $this->validate()) {
+            try {
+                $this->insert();
+                $statusCode = ApiConstant::SC_OK;
+                $data = $this;
+                $error = null;
+                $message = 'Create ' . $this->tableSchema->name . ' successfully';
+            } catch (\Exception $e) {
+                $statusCode = ApiConstant::SC_BAD_REQUEST;
+                $data = null;
+                $error = $e->getMessage();
+                $message = 'An error occurred while creating ' . $this->tableSchema->name;
+            }
 
         } else {
             $statusCode = ApiConstant::SC_BAD_REQUEST;
@@ -56,15 +65,21 @@ Base extends ActiveRecord
         }
         return ResultHelper::build($statusCode, $data, $error, $message);
     }
+
     public function actionUpdate()
     {
-        if ($this->load(Yii::$app->request->post(), '') && $this->update())
-        {
-            $statusCode = ApiConstant::SC_OK;
-            $data = $this;
-            $error = null;
-            $message = 'Update ' . $this->tableSchema->name. ' successfully';
-
+        if ($this->load(Yii::$app->request->post(), '') && $this->validate()) {
+            try {
+                $statusCode = ApiConstant::SC_OK;
+                $data = $this;
+                $error = null;
+                $message = 'Update ' . $this->tableSchema->name . ' successfully';
+            } catch (\Exception $e) {
+                $statusCode = ApiConstant::SC_BAD_REQUEST;
+                $data = null;
+                $error = $e->getMessage();
+                $message = 'An error occurred while updating ' . $this->tableSchema->name;
+            }
         } else {
             $statusCode = ApiConstant::SC_BAD_REQUEST;
             $data = null;
@@ -77,14 +92,13 @@ Base extends ActiveRecord
     public function actionDelete()
     {
         $this->delete();
-        if($this->isDeleted == 1)
-        {
+        if ($this->isDeleted == 1) {
             $statusCode = ApiConstant::SC_OK;
             $data = [
                 'id' => $this->id
             ];
             $error = null;
-            $message = 'Delete ' . $this->tableSchema->name. ' successfully';
+            $message = 'Delete ' . $this->tableSchema->name . ' successfully';
 
         } else {
             $statusCode = ApiConstant::SC_BAD_REQUEST;

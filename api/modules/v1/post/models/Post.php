@@ -16,7 +16,7 @@ class Post extends Base
     public function rules()
     {
         return [
-            [['title', 'tags', 'reactions'], 'required'],
+            [['title'], 'required'],
             [['body'], 'string'],
             [['created_by', 'reactions'], 'integer'],
             [['title'], 'string', 'max' => 255]
@@ -50,7 +50,7 @@ class Post extends Base
             $this->setAttribute('tags', implode(',', $this->tags));
         }
         if ($insert) {
-            $this->setAttribute('created_by', Yii::$app->user->id);
+            $this->setAttribute('created_by', $this->created_by ?? Yii::$app->user->id);
         }
         return parent::beforeSave($insert);
     }

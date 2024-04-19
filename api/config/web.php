@@ -15,6 +15,7 @@ $config = [
             'class' => api\modules\v1\Module::class,
         ],
     ],
+    'bootstrap' => ['log', 'queue'],
     'components' => [
         'user' => [
             'identityClass' => 'api\base\Identity'
@@ -29,10 +30,22 @@ $config = [
             'class' => 'yii\i18n\Formatter',
             'timeZone' => 'Asia/Ho_Chi_Minh',
         ],
+
         'queue' => [
-            'class' => 'yii\queue\redis\Queue',
-            'redis' => 'redis',
-            'channel' => 'queue',
+            'class' => \yii\queue\db\Queue::class,
+            'db' => 'db',
+            'tableName' => '{{%queue}}',
+            'channel' => 'default',
+            'mutex' => \yii\mutex\MysqlMutex::class,
+        ],
+        'log' => [
+            'targets' => [
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info', 'error'],
+                    'logFile' => 'api/console/runtime/logs/queue.log',
+                ],
+            ],
         ],
 //        'mailer' => [
 //            'class' => 'yii\swiftmailer\Mailer',
@@ -51,6 +64,7 @@ $config = [
             'format' => Response::FORMAT_JSON,
         ],
     ],
+
     'params' => $params
 ];
 

@@ -4487,10 +4487,10 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "yiisoft/yii2-queue": 20,
         "schmunk42/yii2-giiant": 20,
         "vlucas/phpdotenv": 20,
-        "yiisoft/yii2-httpclient": 20
+        "yiisoft/yii2-httpclient": 20,
+        "predis/predis": 15
     },
     "prefer-stable": false,
     "prefer-lowest": false,
