@@ -19,7 +19,7 @@ class m240416_021138_create_product_table extends Migration
             'price' => $this->double()->notNull(),
             'stock' => $this->integer()->notNull()->defaultValue(0),
             'category' => $this->string()->notNull(),
-            'created_by' => $this->integer()->notNull(),
+            'created_by' => $this->integer(),
             'created_at' => $this->dateTime()->notNull(),
             'updated_at' => $this->dateTime()->notNull(),
             'isDeleted' => $this->boolean()

@@ -15,8 +15,8 @@ class Product extends Base
 
     public function fields()
     {
-        return ['id', 'title', 'description', 'price', 'discountPercentage', 'rating', 'stock',
-            'category', 'brand', 'user', 'created_at', 'updated_at'];
+        return ['id', 'title', 'description', 'price', 'stock',
+            'category', 'user', 'created_at', 'updated_at'];
     }
 
     public function extraFields()
@@ -38,7 +38,7 @@ class Product extends Base
     public function beforeSave($insert)
     {
         if ($insert) {
-            $this->setAttribute('created_by', $this->created_by ?? Yii::$app->user->id);
+            $this->setAttribute('created_by',  Yii::$app->user->id ?? null);
         }
         return parent::beforeSave($insert);
     }

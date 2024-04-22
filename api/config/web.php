@@ -42,8 +42,8 @@ $config = [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['info', 'error'],
-                    'logFile' => 'api/console/runtime/logs/queue.log',
+                    'levels' => ['info', 'error', 'warning'],
+                    'logFile' => '@runtime/logs/queue.log',
                 ],
             ],
         ],

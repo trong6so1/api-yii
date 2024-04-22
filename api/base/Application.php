@@ -1,7 +1,6 @@
 <?php
 
 namespace api\base;
-
 use yii\web\Application as BaseApplication;
 
 /**

@@ -34,7 +34,9 @@ return [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'levels' => ['info', 'error', 'warning'],
+//                    'categories' => ['queue'],
+                    'logFile' => '@runtime/logs/queue.log',
                 ],
             ],
         ],

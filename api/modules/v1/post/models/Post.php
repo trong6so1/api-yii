@@ -50,7 +50,7 @@ class Post extends Base
             $this->setAttribute('tags', implode(',', $this->tags));
         }
         if ($insert) {
-            $this->setAttribute('created_by', $this->created_by ?? Yii::$app->user->id);
+            $this->setAttribute('created_by', Yii::$app->user->id ?? null);
         }
         return parent::beforeSave($insert);
     }

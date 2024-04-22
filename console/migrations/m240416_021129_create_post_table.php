@@ -19,7 +19,7 @@ class m240416_021129_create_post_table extends Migration
             'tags' => $this->string(),
             'reactions' => $this->integer()->defaultValue(0),
             'created_at' => $this->dateTime()->notNull(),
-            'created_by' => $this->integer()->notNull(),
+            'created_by' => $this->integer(),
             'updated_at' => $this->dateTime()->notNull(),
             'isDeleted' => $this->boolean(),
         ]);

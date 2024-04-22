@@ -2,7 +2,7 @@
 
 namespace common\jobs;
 
-use api\modules\v1\product\models\Product;
+use Yii;
 
 class InsertJob extends \yii\base\BaseObject implements \yii\queue\JobInterface
 {
@@ -17,21 +17,26 @@ class InsertJob extends \yii\base\BaseObject implements \yii\queue\JobInterface
 
     public function execute($queue)
     {
+        Yii::info("start queue","queue");
+        $startTime = microtime(true);
+
         $sum = count($this->data);
         $total = 0;
         foreach ($this->data as $item) {
             $model = new $this->modelClass;
             if ($model->load($item, '') && $model->validate()) {
                 try {
-                    $model->insert();
+                    $model->save();
                     $total++;
                 } catch (\Exception $e) {
-                    var_dump($e->getMessage());
+                    Yii::error($e->getMessage());
                 }
             } else {
-                var_dump($model->getFirstErrors());
+                Yii::error($model->getFirstErrors());
             }
         }
-        echo "Add success " . $total . "/" . $sum;
+        $executionTime = microtime(true) - $startTime;
+        Yii::info("Add success " . $total . "/" . $sum, "queue");
+        Yii::info("Job executed in $executionTime seconds.", "queue");
     }
 }
