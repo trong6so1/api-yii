@@ -12,6 +12,18 @@ use yii\filters\auth\HttpBearerAuth;
  */
 class Controller extends \yii\rest\Controller
 {
+    public function verbs(): array
+    {
+        $verbs = [
+            'index' => ['GET'],
+            'view' => ['GET'],
+            'create' => ['POST'],
+            'update' => ['PUT','POST'],
+            'delete' => ['DELETE','GET'],
+        ];
+        return array_merge(parent::verbs(),$verbs);
+    }
+
     public function behaviors(): array
     {
         $behaviors = parent::behaviors();
