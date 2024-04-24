@@ -11,7 +11,22 @@ use yii\filters\auth\HttpBearerAuth;
  */
 class Controller extends \yii\rest\Controller
 {
-    public function behaviors()
+    public function verbs(): array
+    {
+        $verbs = [
+            'index' => ['GET'],
+            'view' => ['GET'],
+            'create' => ['POST'],
+            'update' => ['PUT','POST'],
+            'delete' => ['DELETE','GET'],
+            'login' => ['POST'],
+            'signup' => ['POST'],
+            'logout' => ['GET'],
+        ];
+        return array_merge(parent::verbs(),$verbs);
+    }
+
+    public function behaviors(): array
     {
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
@@ -19,7 +34,7 @@ class Controller extends \yii\rest\Controller
             'authMethods' => [
                 HttpBearerAuth::class,
             ],
-            'except' => ['login', 'signup']
+            'except' => ['login', 'signup','logout']
         ];
         return $behaviors;
     }
