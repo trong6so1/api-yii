@@ -6,20 +6,27 @@ use api\helper\response\ApiConstant;
 use api\helper\response\ResultHelper;
 use api\modules\v1\cart\models\Cart;
 use api\modules\v1\Product\models\Product;
+use Throwable;
 use Yii;
+use yii\db\Exception;
+use yii\db\StaleObjectException;
 
-class CartController extends Controller
+class SiteController extends Controller
 {
-    public $modelClass = '\api\modules\v1\cart\models\Product';
-
-    public function actionIndex()
+    public function actionIndex(): array
     {
         $user = Yii::$app->user->getId();
         $cart = Cart::findAll(['user_id' => $user]);
-        return $cart;
+        $statusCode = ApiConstant::SC_OK;
+        $error = null;
+        $message = "Get all cart";
+        return ResultHelper::build($statusCode, $cart, $error, $message);
     }
 
-    public function actionAdd()
+    /**
+     * @throws Exception
+     */
+    public function actionAdd(): array
     {
         $product = Product::findOne(['id' => Yii::$app->request->post('product_id')]);
         if (empty($product)) {
@@ -36,14 +43,13 @@ class CartController extends Controller
             $cart = Cart::findOne(['user_id' => $user, 'product_id' => $product->id]);
             if ($cart) {
                 $cart->quantity += $quantity;
-                $cart->save();
             } else {
                 $cart = new Cart();
                 $cart->product_id = $product->id;
                 $cart->quantity = $quantity;
                 $cart->user_id = $user;
-                $cart->save();
             }
+            $cart->save();
             $statusCode = ApiConstant::SC_OK;
             $data = 'Add Product ID: ' . $product->id . ' successfully';
             $message = 'Add Success';
@@ -52,7 +58,12 @@ class CartController extends Controller
         return ResultHelper::build($statusCode, $data, $error, $message);
     }
 
-    public function actionLess()
+    /**
+     * @throws StaleObjectException
+     * @throws Exception
+     * @throws Throwable
+     */
+    public function actionLess(): array
     {
         $product = Product::findOne(['id' => Yii::$app->request->post('product_id')]);
         if (empty($product)) {
@@ -68,7 +79,7 @@ class CartController extends Controller
             }
             $cart = Cart::findOne(['user_id' => $user, 'product_id' => $product->id]);
             if ($cart) {
-                if ($quantity > $cart->quantity) {
+                if ($quantity >= $cart->quantity) {
                     $cart->delete();
                 } else {
                     $cart->quantity -= $quantity;
@@ -88,7 +99,11 @@ class CartController extends Controller
         return ResultHelper::build($statusCode, $data, $message, $error);
     }
 
-    public function actionDelete()
+    /**
+     * @throws StaleObjectException
+     * @throws Throwable
+     */
+    public function actionDelete(): array
     {
         $product = Product::findOne(['id' => Yii::$app->request->post('product_id')]);
         if (empty($product)) {

@@ -2,33 +2,25 @@
 
 namespace api\modules\v1\cart\models;
 
-use api\modules\v1\Product\models\Product;
-use api\modules\v1\User\models\User;
+use Yii;
 
+/**
+ * @property array|int|mixed|object|null $quantity
+ * @property mixed|null $product_id
+ * @property int|mixed|string|null $user_id
+ */
 class Cart extends \common\models\Cart
 {
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%cart}}';
     }
 
-    public function fields()
+    public function beforeSave($insert): bool
     {
-        return ['quantity', 'product'];
-    }
-
-    public function extraFields()
-    {
-        return ['user_id', 'user'];
-    }
-
-    public function getUser()
-    {
-        return $this->hasOne(User::class, ['id' => 'user_id']);
-    }
-
-    public function getProduct()
-    {
-        return $this->hasOne(Product::class, ['id' => 'product_id']);
+        if ($insert) {
+            $this->user_id = Yii::$app->user->id;
+        }
+        return parent::beforeSave($insert);
     }
 }
