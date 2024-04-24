@@ -2,50 +2,29 @@
 
 namespace api\modules\v1\product\models;
 
-use api\modules\v1\user\models\User;
-use common\models\Base;
 use Yii;
 
-class Product extends Base
+/**
+ * @property mixed|null $id
+ * @property array|mixed|object|null $title
+ * @property array|mixed|object|null $description
+ * @property array|mixed|object|null $price
+ * @property array|mixed|object|null $stock
+ * @property array|mixed|object|null $category
+ */
+class Product extends \common\models\Product
 {
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%product}}';
     }
 
-    public function fields()
-    {
-        return ['id', 'title', 'description', 'price', 'stock',
-            'category', 'user', 'created_at', 'updated_at'];
-    }
-
-    public function extraFields()
-    {
-        return ['isDeleted'];
-    }
-
-    public function rules()
-    {
-        return [
-            [['title', 'price', 'category'], 'required'],
-            [['description'], 'string'],
-            [['price'], 'number'],
-            [['stock'], 'integer'],
-            [['title', 'category'], 'string', 'max' => 255],
-        ];
-    }
-
-    public function beforeSave($insert)
+    public function beforeSave($insert): bool
     {
         if ($insert) {
-            $this->setAttribute('created_by',  Yii::$app->user->id ?? null);
+            $this->setAttribute('created_by', Yii::$app->user->id ?? null);
+            $this->setIsDeleted();
         }
         return parent::beforeSave($insert);
     }
-
-    public function getUser()
-    {
-        return $this->hasOne(User::class, ['id' => 'created_by']);
-    }
-
 }

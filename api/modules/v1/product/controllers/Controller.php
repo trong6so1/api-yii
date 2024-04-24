@@ -2,7 +2,6 @@
 
 namespace api\modules\v1\product\controllers;
 
-
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 
@@ -12,7 +11,19 @@ use yii\filters\auth\HttpBearerAuth;
  */
 class Controller extends \yii\rest\Controller
 {
-    public function behaviors()
+    public function verbs(): array
+    {
+        $verbs = [
+            'index' => ['GET'],
+            'view' => ['GET'],
+            'create' => ['POST'],
+            'update' => ['PUT', 'POST'],
+            'delete' => ['DELETE', 'GET'],
+        ];
+        return array_merge(parent::verbs(), $verbs);
+    }
+
+    public function behaviors(): array
     {
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
