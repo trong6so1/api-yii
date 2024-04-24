@@ -128,7 +128,8 @@ class SiteController extends Controller
             $error = 'product ID not found';
             $message = 'Delete product failed';
         } else {
-            if ($product->delete()) {
+            $product->delete();
+            if ($product->isDeleted) {
                 $statusCode = ApiConstant::SC_OK;
                 $data = ['id' => $id];
                 $error = null;

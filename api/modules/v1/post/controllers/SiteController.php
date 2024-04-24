@@ -123,7 +123,8 @@ class SiteController extends Controller
             $error = 'Post ID not found';
             $message = 'Delete post failed';
         } else {
-            if ($post->delete()) {
+            $post->delete();
+            if ($post->isDeleted) {
                 $statusCode = ApiConstant::SC_OK;
                 $data = ['id' => $id];
                 $error = null;

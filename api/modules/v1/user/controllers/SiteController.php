@@ -98,7 +98,7 @@ class SiteController extends Controller
             $message = 'Updated Failed';
             return ResultHelper::build($statusCode, $data, $error, $message);
         } else {
-            if ($user->load(Yii::$app->request->post(),'') && $user->validate()) {
+            if ($user->load(Yii::$app->request->post(), '') && $user->validate()) {
                 if ($user->save()) {
                     $statusCode = ApiConstant::SC_OK;
                     $data = ['user' => $user];
@@ -161,7 +161,8 @@ class SiteController extends Controller
             $error = 'User ID not found';
             $message = 'Delete Failed';
         } else {
-            if ($user->delete()) {
+            $user->delete();
+            if ($user->isDeleted) {
                 $statusCode = ApiConstant::SC_OK;
                 $data = [
                     'User ID' => $id
@@ -180,13 +181,12 @@ class SiteController extends Controller
 
     public function actionLogout(): array
     {
-        if(Yii::$app->user->logout()){
+        if (Yii::$app->user->logout()) {
             $statusCode = ApiConstant::SC_OK;
             $data = null;
             $error = null;
             $message = 'Logout successfully';
-        }
-        else{
+        } else {
             $statusCode = ApiConstant::SC_BAD_REQUEST;
             $data = null;
             $error = 'There was an error during logout';

@@ -2,7 +2,9 @@
 
 namespace api\modules\v1\product\models;
 
+use api\helper\timeBehavior\TimeBehavior;
 use Yii;
+use yii2tech\ar\softdelete\SoftDeleteBehavior;
 
 /**
  * @property mixed|null $id
@@ -26,5 +28,27 @@ class Product extends \common\models\Product
             $this->setIsDeleted();
         }
         return parent::beforeSave($insert);
+    }
+
+    public static function find(): \yii\db\ActiveQuery
+    {
+        return parent::find()->where(['isDeleted' => 0]);
+    }
+
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => TimeBehavior::class,
+            ],
+            'softDeleteBehavior' => [
+                'class' => SoftDeleteBehavior::class,
+                'softDeleteAttributeValues' => [
+                    'isDeleted' => true
+                ],
+                'replaceRegularDelete' => true
+            ],
+
+        ];
     }
 }
