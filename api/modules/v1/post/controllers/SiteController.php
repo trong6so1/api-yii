@@ -5,6 +5,7 @@ namespace api\modules\v1\post\controllers;
 use api\helper\response\ApiConstant;
 use api\helper\response\ResultHelper;
 use api\modules\v1\post\models\Post;
+use api\modules\v1\post\models\search\SearchIndex;
 use Throwable;
 use Yii;
 use yii\db\Exception;
@@ -14,7 +15,7 @@ class SiteController extends Controller
 {
     public function actionIndex(): array
     {
-        $posts = Post::find()->all();
+        $posts = SearchIndex::search(Yii::$app->request->queryParams);
         $statusCode = ApiConstant::SC_OK;
         $data = ['posts' => $posts];
         $error = null;
