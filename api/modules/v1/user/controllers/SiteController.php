@@ -4,6 +4,7 @@ namespace api\modules\v1\user\controllers;
 
 use api\helper\response\ApiConstant;
 use api\helper\response\ResultHelper;
+use api\modules\v1\User\models\search\SearchIndex;
 use api\modules\v1\User\models\User;
 use Throwable;
 use Yii;
@@ -14,18 +15,7 @@ class SiteController extends Controller
 {
     public function actionIndex(): array
     {
-//        $request = Yii::$app->request->getQueryParams();
-//        $query = $this->modelClass::find();
-//        $query = $this->filter($query, $request);
-//        $query = $this->sort($query, $request);
-//        $dataProvider = new ActiveDataProvider([
-//            'query' => $query,
-//            'pagination' => [
-//                'pageSize' => Yii::$app->request->getQueryParam('perPage', 10)
-//            ],
-//        ]);
-//        return $dataProvider->getModels();
-        $users = User::find()->all();
+        $users = SearchIndex::search(Yii::$app->request->queryParams);
         $statusCode = ApiConstant::SC_OK;
         $data = [
             'users' => $users,
@@ -56,6 +46,7 @@ class SiteController extends Controller
 
     /**
      * @throws Exception
+     * @throws \Exception
      */
     public function actionCreate(): array
     {
@@ -66,6 +57,9 @@ class SiteController extends Controller
         $user->password = $request['password'];
         if ($user->validate()) {
             if ($user->save()) {
+                $auth = Yii::$app->authManager;
+                $authorRole = $auth->getRole('author');
+                $auth->assign($authorRole, $user->getId());
                 $statusCode = ApiConstant::SC_OK;
                 $data = ['user' => $user];
                 $error = null;
