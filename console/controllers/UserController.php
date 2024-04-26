@@ -2,6 +2,7 @@
 
 namespace console\controllers;
 
+use common\jobs\InsertUserJob;
 use Yii;
 use api\modules\v1\User\models\User;
 use common\jobs\InsertJob;
@@ -19,8 +20,7 @@ class UserController extends Controller
             ->send();
         if ($response->isOk) {
             $data = $response->data;
-            $modelClass = User::class;
-            Yii::$app->queue->push(new InsertJob($modelClass, $data));
+            Yii::$app->queue->push(new InsertUserJob(['data' => $data]));
             echo "Get HTTP Client Success.Run queue Insert";
         } else {
             echo "Get HTTP Client Failed";
