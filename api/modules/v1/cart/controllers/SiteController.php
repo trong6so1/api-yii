@@ -5,6 +5,7 @@ namespace api\modules\v1\cart\controllers;
 use api\helper\response\ApiConstant;
 use api\helper\response\ResultHelper;
 use api\modules\v1\cart\models\Cart;
+use api\modules\v1\cart\models\search\SearchIndex;
 use api\modules\v1\Product\models\Product;
 use Throwable;
 use Yii;
@@ -15,8 +16,7 @@ class SiteController extends Controller
 {
     public function actionIndex(): array
     {
-        $user = Yii::$app->user->getId();
-        $cart = Cart::findAll(['user_id' => $user]);
+        $cart = SearchIndex::search(Yii::$app->request->queryParams);
         $statusCode = ApiConstant::SC_OK;
         $error = null;
         $message = "Get all cart";
