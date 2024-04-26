@@ -5,6 +5,7 @@ namespace api\modules\v1\product\controllers;
 use api\helper\response\ApiConstant;
 use api\helper\response\ResultHelper;
 use api\modules\v1\product\models\product;
+use api\modules\v1\product\models\search\SearchIndex;
 use Throwable;
 use Yii;
 use yii\db\Exception;
@@ -14,7 +15,7 @@ class SiteController extends Controller
 {
     public function actionIndex(): array
     {
-        $products = Product::find()->all();
+        $products = SearchIndex::search(Yii::$app->request->queryParams);
         $statusCode = ApiConstant::SC_OK;
         $data = ['products' => $products];
         $error = null;
