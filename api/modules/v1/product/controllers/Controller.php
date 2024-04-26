@@ -1,7 +1,9 @@
 <?php
-
 namespace api\modules\v1\product\controllers;
 
+use api\modules\v1\product\models\Product;
+use Yii;
+use yii\filters\AccessControl;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 
@@ -13,14 +15,13 @@ class Controller extends \yii\rest\Controller
 {
     public function verbs(): array
     {
-        $verbs = [
+        return [
             'index' => ['GET'],
             'view' => ['GET'],
             'create' => ['POST'],
             'update' => ['PUT', 'POST'],
             'delete' => ['DELETE', 'GET'],
         ];
-        return array_merge(parent::verbs(), $verbs);
     }
 
     public function behaviors(): array
@@ -30,6 +31,29 @@ class Controller extends \yii\rest\Controller
             'class' => CompositeAuth::class,
             'authMethods' => [
                 HttpBearerAuth::class,
+            ],
+        ];
+        $behaviors['access'] = [
+            'class' => AccessControl::class,
+            'rules' => [
+                [
+                    'allow' => true,
+                    'actions' => ['index', 'view'],
+                    'roles' => ['author', 'admin'],
+                ],
+                [
+                    'allow' => true,
+                    'actions' => ['create'],
+                    'roles' => ['create'],
+                ],
+                [
+                    'allow' => true,
+                    'actions' => ['update', 'delete'],
+                    'roles' => ['update'],
+                    'roleParams' => function () {
+                        return ['product' => Product::findOne(['id' => Yii::$app->request->get('id')])];
+                    },
+                ],
             ],
         ];
         return $behaviors;

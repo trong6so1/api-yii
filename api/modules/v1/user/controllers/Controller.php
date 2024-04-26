@@ -2,6 +2,7 @@
 
 namespace api\modules\v1\user\controllers;
 
+use yii\filters\AccessControl;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBearerAuth;
 
@@ -17,13 +18,13 @@ class Controller extends \yii\rest\Controller
             'index' => ['GET'],
             'view' => ['GET'],
             'create' => ['POST'],
-            'update' => ['PUT','POST'],
-            'delete' => ['DELETE','GET'],
+            'update' => ['PUT', 'POST'],
+            'delete' => ['DELETE', 'GET'],
             'login' => ['POST'],
             'signup' => ['POST'],
             'logout' => ['GET'],
         ];
-        return array_merge(parent::verbs(),$verbs);
+        return array_merge(parent::verbs(), $verbs);
     }
 
     public function behaviors(): array
@@ -34,7 +35,23 @@ class Controller extends \yii\rest\Controller
             'authMethods' => [
                 HttpBearerAuth::class,
             ],
-            'except' => ['login', 'signup','logout']
+            'except' => ['login', 'signup', 'logout']
+        ];
+        $behaviors['access'] = [
+            'class' => AccessControl::class,
+            'except' => ['login', 'signup'],
+            'rules' => [
+                [
+                    'allow' => true,
+                    'actions' => ['index', 'create', 'view'],
+                    'roles' => ['author', 'admin'],
+                ],
+                [
+                    'allow' => true,
+                    'actions' => ['update', 'delete'],
+                    'roles' => ['admin'],
+                ],
+            ],
         ];
         return $behaviors;
     }
