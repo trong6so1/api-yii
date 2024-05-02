@@ -47,18 +47,21 @@ $config = [
                 ],
             ],
         ],
-//        'mailer' => [
-//            'class' => 'yii\swiftmailer\Mailer',
-//            'useFileTransport' => false,
-//            'transport' => [
-//                'class' => 'Swift_SmtpTransport',
-//                'host' => '',
-//                'username' => '',
-//                'password' => '',
-//                'port' => '587',
-//                'encryption' => 'tls',
-//            ],
-//        ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.gmail.com',
+                'username' => 'trong6so1@gmail.com',
+                'password' => 'bsvouvefyklypfqu',
+                'port' => '587',
+                'encryption' => 'tls',
+            ],
+        ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
         'response' => [
             'class' => Response::class,
             'format' => Response::FORMAT_JSON,
