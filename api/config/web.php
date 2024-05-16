@@ -20,8 +20,13 @@ $config = [
         'user' => [
             'identityClass' => 'api\base\Identity'
         ],
+        'report' => [
+            'class' => 'yii\web\UrlManager',
+            'hostInfo' => getenv('HOST_REPORT_INFO'),
+        ],
         'request' => [
             'enableCookieValidation' => false,
+            'enableCsrfValidation' => true,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ],
@@ -30,7 +35,6 @@ $config = [
             'class' => 'yii\i18n\Formatter',
             'timeZone' => 'Asia/Ho_Chi_Minh',
         ],
-
         'queue' => [
             'class' => \yii\queue\db\Queue::class,
             'db' => 'db',
@@ -67,7 +71,6 @@ $config = [
             'format' => Response::FORMAT_JSON,
         ],
     ],
-
     'params' => $params
 ];
 
