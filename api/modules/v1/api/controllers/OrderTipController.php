@@ -7,7 +7,7 @@ use yii\httpclient\Client;
 use Yii;
 use yii\httpclient\Exception;
 
-class OrderItemController extends Controller
+class OrderTipController extends Controller
 {
     /**
      * @throws Exception
@@ -23,7 +23,7 @@ class OrderItemController extends Controller
             'Accept' => 'application/json',
             'Authorization' => $request['token'] ?? "",
         ];
-        $response = $client->post('v1/order/order-item/create',
+        $response = $client->post('v1/order/order-tip/create',
             $request,
             $header
         )->send();
