@@ -26,6 +26,9 @@ class Module extends \yii\base\Module
             ],
             'cart' => [
                 'class' => cart\Module::class,
+            ],
+            'api' => [
+                'class' => api\Module::class,
             ]
         ];
     }
