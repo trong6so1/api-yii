@@ -1,0 +1,16 @@
+Luồng dữ liệu gọi API từ app-yii qua source report để tạo category, product, service, customer, order:
+* App-yii:
+	+ Kiểm tra method,
+	+ Kiểm tra login, permission bằng token
+	+ Gọi api và truyền params qua source report
+* Source Report:
+	+ Kiểm tra method và login,permission bằng token từ app-yii truyền vào
+	+ Validate dữ liệu truyền vào
+	+ Nếu dữ liệu truyền vào phù hợp thêm vào table
+	+ Trả về kết quả cho bên app-yii
+* App-yii:
+	+ lấy kết quả trả về từ bên report và xuất kết quả cho người dùng
+
+Link text postman: https://documenter.getpostman.com/view/14126026/2sA3BkdDqN
+
+
