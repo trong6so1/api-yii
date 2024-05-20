@@ -21,7 +21,7 @@ $config = [
             'identityClass' => 'api\base\Identity'
         ],
         'report' => [
-            'class' => 'yii\web\UrlManager',
+            'class' => \api\component\ReportComponent::class,
             'hostInfo' => getenv('HOST_REPORT_INFO'),
         ],
         'request' => [

@@ -48,6 +48,10 @@ return [
             'mutex' => \yii\mutex\MysqlMutex::class,
             'as log' => \yii\queue\LogBehavior::class,
         ],
+        'report' => [
+            'class' => \api\component\ReportComponent::class,
+            'hostInfo' => getenv('HOST_REPORT_INFO')
+        ]
     ],
     'params' => $params,
 ];
