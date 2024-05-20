@@ -8,7 +8,7 @@ class CustomerController extends Controller
 {
     public function actionCreate(): array
     {
-        $url = 'v1/category/site/create';
+        $url = 'v1/customer/site/create';
         $method = 'POST';
         $request = Yii::$app->request->queryParams;
         $header = [
