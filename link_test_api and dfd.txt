@@ -11,6 +11,6 @@ Luồng dữ liệu gọi API từ app-yii qua source report để tạo categor
 * App-yii:
 	+ lấy kết quả trả về từ bên report và xuất kết quả cho người dùng
 
-Link text postman: https://documenter.getpostman.com/view/14126026/2sA3BkdDqN
+Link text postman: https://documenter.getpostman.com/view/14126026/2sA3QmEFPU
 
 
